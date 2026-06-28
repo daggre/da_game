@@ -11,7 +11,7 @@ shared_scripts {
 }
 
 client_scripts {
-    '@da_lib/features/mode/mode_cl.lua',
     'game_cl.lua',
-    'cfg_peddensity_cl.lua',
+    'reticle_cl.lua',
+    'zoom_cl.lua',
 }
