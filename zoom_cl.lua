@@ -11,9 +11,10 @@
 -- mouse-look still drives the gameplay cam underneath — at a ramped-down FOV. Releasing
 -- ramps the FOV back to the seed and hands rendering back to the gameplay cam.
 
-local ZoomInput = `INPUT_SNIPER_ZOOM_OUT_ONLY` -- the control the [ key is bound to
+local ZoomKey = "RightBracket"
 
 local Zoom = {
+    KeyHash = dat.key[ZoomKey],
     TargetFov  = 10.0, -- FOV while fully zoomed in (lower = closer)
     RateChange = 1.4,  -- ~FOV units per frame at 60fps (ramp speed, both directions)
     Snap       = 0.05, -- stop rendering once back within this of the seed FOV
@@ -28,7 +29,7 @@ local function approach(cur, goal, step)
 end
 
 local function isZoomKeyDown()
-    return IsControlPressed(0, ZoomInput) == 1 or IsDisabledControlPressed(0, ZoomInput) == 1
+    return IsControlPressed(0, Zoom.KeyHash) == 1 or IsDisabledControlPressed(0, Zoom.KeyHash) == 1
 end
 
 local function runZoom()
@@ -68,7 +69,7 @@ end
 -- justPressed only fires while the game baseline owns the key (no take-over mode active),
 -- so zoom can only *start* during normal play. The thread then reads the key state
 -- directly, so it always resets even if the release event is later suppressed.
-da_mode.addGameKey("LeftBracket", {
+da_mode.addGameKey(ZoomKey, {
     justPressed = function()
         Citizen.CreateThread(runZoom)
     end,
