@@ -12,6 +12,8 @@ shared_scripts {
 
 client_scripts {
     '@da_lib/features/mode/mode_cl.lua',
+    '@da_lib/features/anim/anim_cl.lua',
+    '@da_lib/features/weapon/weapon_cl.lua',
     '@da_lib/data/key.lua',
     'spawn_cl.lua',
     'game_cl.lua',
