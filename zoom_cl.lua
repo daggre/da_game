@@ -40,6 +40,7 @@ local Zoom = {
 }
 
 Zoom.Anim.Enter = function(ped, taskFilter)
+    if not IsPedHuman(ped) then return end
     local anim = "intro"
     local blendIn = 3.0
     local blendOut = 0.5
@@ -51,6 +52,7 @@ Zoom.Anim.Enter = function(ped, taskFilter)
     da_anim.ped(ped, Zoom.Anim.Dict, anim, blendIn, blendOut, duration, flags, rate, ikFlags, taskFilter)
 end
 Zoom.Anim.Idle = function(ped, taskFilter, force)
+    if not IsPedHuman(ped) then return end
     if IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "intro", 3) then return end
     if IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "outro", 3) then return end
     if not force and IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "loop", 49) then return end
@@ -67,6 +69,7 @@ Zoom.Anim.Idle = function(ped, taskFilter, force)
     da_anim.ped(ped, Zoom.Anim.Dict, anim, blendIn, blendOut, duration, flags, rate, ikFlags, taskFilter)
 end
 Zoom.Anim.Exit = function(ped, taskFilter)
+    if not IsPedHuman(ped) then return end
     if IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "outro", 3) then return end
     local anim = "outro"
     local blendIn = 3.0
@@ -79,6 +82,7 @@ Zoom.Anim.Exit = function(ped, taskFilter)
     da_anim.ped(ped, Zoom.Anim.Dict, anim, blendIn, blendOut, duration, flags, rate, ikFlags, taskFilter)
 end
 Zoom.Anim.GetTaskFilter = function(ped)
+    if not IsPedHuman(ped) then return "" end
     local armedFilter = "headandneckonly_filter"
     local unarmedFilter = "headneckandrightarm_filter"
     if IsPlayerFreeAiming(ped) == 1 then return armedFilter end
