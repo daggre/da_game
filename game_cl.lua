@@ -24,7 +24,7 @@ Citizen.CreateThread(function()
         DisableControlAction(0, `INPUT_SELECT_RADAR_MODE`, true)
         DisableControlAction(0, `INPUT_PC_FREE_LOOK`, true)
 
-        -- UiPromptDisablePromptsThisFrame() -- All Prompts
+        UiPromptDisablePromptsThisFrame() -- All Prompts
         -- UiPromptDisablePromptTypeThisFrame(7) -- Animal info
         SetPlayerTargetingMode(3) -- Set Targeting Mode Expert (Free Aim)
         SetMinimapType(0) -- Force Compass-Style Radar

@@ -10,11 +10,17 @@ shared_scripts {
     '@da_log/log_sh.lua',
 }
 
+server_scripts {
+    'wolf_srv.lua',
+}
+
 client_scripts {
     '@da_lib/features/mode/mode_cl.lua',
     '@da_lib/features/control/control_cl.lua',
     '@da_lib/features/anim/anim_cl.lua',
     '@da_lib/features/hud/cores_cl.lua',
+    '@da_lib/features/util/util_cl.lua',
+    '@da_lib/features/raycast/raycast_cl.lua',
     '@da_lib/features/weapon/weapon_cl.lua',
     '@da_lib/features/move/move_cl.lua',
     '@da_lib/data/key.lua',

@@ -21,13 +21,12 @@
 -- sticks for the rest of the zoom.
 
 local ZoomKey = "LeftBracket"
-local TaskFilterChanged = false
 
 local Zoom = {
     KeyHash    = dat.keyHash[ZoomKey],
-    TargetFov  = 10.0, -- FOV while fully zoomed in (lower = closer)
-    MinFov     = 5.0,  -- floor for the alt+mouse FOV adjust (can't go tighter than this)
-    FovRate    = 6.0,  -- FOV units per mouse-delta while adjusting (matches freecam Fov.RateChange)
+    TargetFov  = 11.5,  -- default FOV while zoomed in (lower = closer); alt+mouse can push tighter
+    MinFov     = 11.5,  -- floor for the alt+mouse FOV adjust (tightest/farthest zoom allowed)
+    FovRate    = 4.0,  -- FOV units per mouse-delta while adjusting (matches freecam Fov.RateChange)
     RateChange = 1.4,  -- ~FOV units per frame at 60fps (ramp speed, both directions)
     Snap       = 0.05, -- treat as "back home" once FOV is within this of the seed
     LookSpeed  = 6.0,  -- base mouse-look speed (matches da_dev freecam Speed.Mouse)
@@ -41,45 +40,29 @@ local Zoom = {
 
 Zoom.Anim.Enter = function(ped, taskFilter)
     if not IsPedHuman(ped) then return end
-    local anim = "intro"
-    local blendIn = 3.0
-    local blendOut = 0.5
-    local duration = -1
-    local flags = 24
-    local rate = 1
-    local ikFlags = 0
-    taskFilter = taskFilter or Zoom.Anim.TaskFilter
-    da_anim.ped(ped, Zoom.Anim.Dict, anim, blendIn, blendOut, duration, flags, rate, ikFlags, taskFilter)
+    da_anim.ped(ped, Zoom.Anim.Dict, "intro", {
+        blendIn = 3.0, blendOut = 0.5, duration = -1, flags = 24, rate = 1,
+        filter = taskFilter or Zoom.Anim.TaskFilter,
+    })
 end
 Zoom.Anim.Idle = function(ped, taskFilter, force)
     if not IsPedHuman(ped) then return end
     if IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "intro", 3) then return end
     if IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "outro", 3) then return end
     if not force and IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "loop", 49) then return end
-    local anim = "loop"
-    local blendIn = 3.0
-    local blendOut = 0.5
-    local duration = -1
-    local flags = 25
-    local rate = 1
-    local ikFlags = 0
-    taskFilter = taskFilter or Zoom.Anim.TaskFilter
-
     StopAnimTask(ped, Zoom.Anim.Dict, "loop", 1.0)
-    da_anim.ped(ped, Zoom.Anim.Dict, anim, blendIn, blendOut, duration, flags, rate, ikFlags, taskFilter)
+    da_anim.ped(ped, Zoom.Anim.Dict, "loop", {
+        blendIn = 3.0, blendOut = 0.5, duration = -1, flags = 25, rate = 1,
+        filter = taskFilter or Zoom.Anim.TaskFilter,
+    })
 end
 Zoom.Anim.Exit = function(ped, taskFilter)
     if not IsPedHuman(ped) then return end
     if IsEntityPlayingAnim(ped, Zoom.Anim.Dict, "outro", 3) then return end
-    local anim = "outro"
-    local blendIn = 3.0
-    local blendOut = 0.5
-    local duration = 500
-    local flags = 24
-    local rate = 1
-    local ikFlags = 0
-    taskFilter = taskFilter or Zoom.Anim.TaskFilter
-    da_anim.ped(ped, Zoom.Anim.Dict, anim, blendIn, blendOut, duration, flags, rate, ikFlags, taskFilter)
+    da_anim.ped(ped, Zoom.Anim.Dict, "outro", {
+        blendIn = 3.0, blendOut = 0.5, duration = 500, flags = 24, rate = 1,
+        filter = taskFilter or Zoom.Anim.TaskFilter,
+    })
 end
 Zoom.Anim.GetTaskFilter = function(ped)
     if not IsPedHuman(ped) then return "" end
@@ -94,6 +77,11 @@ Zoom.Anim.GetTaskFilter = function(ped)
 end
 
 local running = false -- guards against a second thread while one is winding down
+
+-- The zoomed-in FOV target. Module-scoped so an alt+mouse adjustment persists: whatever you
+-- last dialed it to becomes the starting zoom the next time you hold the key. Seeded to the
+-- default and re-clamped against the live gameplay FOV at the start of each zoom.
+local zoomedFov = Zoom.TargetFov
 
 local function approach(cur, goal, step)
     if cur < goal then return math.min(cur + step, goal); end
@@ -127,7 +115,8 @@ local function runZoom()
 
     local baseFov = GetGameplayCamFov() + 0.0
     local fov = baseFov
-    local zoomedFov = Zoom.TargetFov -- retargetable while zoomed via alt + mouse up/down
+    -- Carry the persisted target in, but keep it sane against this session's gameplay FOV.
+    zoomedFov = math.max(Zoom.MinFov, math.min(baseFov, zoomedFov))
 
     -- Our own rotation, seeded from the gameplay cam so the view starts exactly where we were
     -- looking (rot order 2 / ZXY: x = pitch, y = roll, z = yaw). Roll just rides along.
