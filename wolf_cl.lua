@@ -500,7 +500,7 @@ da_mode.register({
         { key = "5", event = "justPressed", active = true, fn = function()
             -- SecondarySpecialAbilitySetDisabled(PlayerId())
             local playerId = PlayerId()
-            local entity = da_raycast.getEntity(500.0, 20.0, ped)
+            local entity = da_raycast.getEntity(500.0, 20.0, PlayerPedId())
             UnregisterEagleEyeForEntity(playerId, entity)
             UnregisterEagleEyeTrailsForEntity(playerId, entity)
             EagleEyeSetFocusOnAssociatedClueTrail(playerId, 0)
