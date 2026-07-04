@@ -32,5 +32,6 @@ client_scripts {
 }
 
 dependencies {
-    "da_lib",
+    'da_log',
+    'da_lib',
 }
