@@ -458,8 +458,15 @@ end
 da_mode.register({
     name = "animal",
     priority = 2, -- Lowest priority
-    onActivate = function() log.spam("da_mode animal startFn") end,
-    onDeactivate = function() log.spam("da_mode animal stopFn") end,
+    onActivate = function()
+        log.spam("da_mode animal startFn")
+        SetUpEagleEye()
+    end,
+    onDeactivate = function()
+        log.spam("da_mode animal stopFn")
+        local playerId = PlayerId()
+        EnableEagleeye(playerId, false)
+    end,
     keymaps = {
         {
             key = "HorseMelee",
@@ -484,6 +491,7 @@ da_mode.register({
         { key = "2", event = "justPressed", active = true, fn = action(Sniff) },
         { key = "3", event = "justPressed", active = true, fn = action(SniffHigh) },
         { key = "4", event = "justPressed", active = true, fn = function()
+            -- Testing in progress, this targets the animal in vision and tracks it for Eagle Eye
             local playerId = PlayerId()
             local ped = PlayerPedId()
             SecondarySpecialAbilitySetActive(playerId)
@@ -498,6 +506,7 @@ da_mode.register({
             -- ModifyInfiniteTrailVision(playerId, true)
         end },
         { key = "5", event = "justPressed", active = true, fn = function()
+            -- Testing in progress, this untargets entity that is being looked at
             -- SecondarySpecialAbilitySetDisabled(PlayerId())
             local playerId = PlayerId()
             local entity = da_raycast.getEntity(500.0, 20.0, PlayerPedId())
@@ -511,7 +520,6 @@ da_mode.register({
 
 -- Activate the mode whenever the player possesses a registered animal.
 Citizen.CreateThread(function()
-    SetUpEagleEye()
     while true do
         local ped = PlayerPedId()
         local isAnimal = animalFor(ped) ~= nil
