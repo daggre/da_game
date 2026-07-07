@@ -4,7 +4,12 @@ local WildernessDensity = 1.2
 Citizen.CreateThread(function()
     EnableHudContext(-66088566) -- Money
     EnableHudContext(1058184710) -- Skill Cards
-    da_hud.Icon.SetAll(da_hud.Icon.ALWAYS_HIDE) -- Set all cores to hidden
+    da_hud.Icon.Set(da_hud.Icon.STAMINA, da_hud.Icon.ALWAYS_SHOW)
+    da_hud.Icon.Set(da_hud.Icon.STAMINA_CORE, da_hud.Icon.ALWAYS_SHOW)
+    da_hud.Icon.Set(da_hud.Icon.HEALTH, da_hud.Icon.ALWAYS_SHOW)
+    da_hud.Icon.Set(da_hud.Icon.HEALTH_CORE, da_hud.Icon.ALWAYS_SHOW)
+    da_hud.Icon.Set(da_hud.Icon.DEADEYE, da_hud.Icon.ALWAYS_HIDE)
+    da_hud.Icon.Set(da_hud.Icon.DEADEYE_CORE, da_hud.Icon.ALWAYS_HIDE)
     EnableHudContext(`HUD_CTX_IN_FAST_TRAVEL_MENU`) -- Remove reticle, help, feed, award massages, etc all at once
 
     while true do

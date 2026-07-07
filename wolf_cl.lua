@@ -495,7 +495,7 @@ da_mode.register({
             local playerId = PlayerId()
             local ped = PlayerPedId()
             SecondarySpecialAbilitySetActive(playerId)
-            Citizen.InvokeNative(0xE5D3EB37ABC1EB03, playerId)--EagleEyeClearRegisteredTrails(playerId)
+            Citizen.InvokeNative(0xE5D3EB37ABC1EB03, playerId) -- EagleEyeClearRegisteredTrails(playerId)
             local entity = da_raycast.getEntity(500.0, 20.0, ped)
             RegisterEagleEyeForEntity(playerId, entity, false)
             RegisterEagleEyeTrailsForEntity(playerId, entity, false)
@@ -504,6 +504,12 @@ da_mode.register({
             EagleEyeSetFocusOnAssociatedClueTrail(playerId, entity)
             EagleEyeSetCustomDistance(entity, 100.0)
             -- ModifyInfiniteTrailVision(playerId, true)
+
+            da_hud.Icon.Set(da_hud.Icon.STAMINA_CORE, da_hud.Icon.ALWAYS_HIDE)
+            da_hud.Icon.Set(da_hud.Icon.HEALTH, da_hud.Icon.ALWAYS_HIDE)
+            da_hud.Icon.Set(da_hud.Icon.HEALTH_CORE, da_hud.Icon.ALWAYS_HIDE)
+            da_hud.Icon.Set(da_hud.Icon.DEADEYE, da_hud.Icon.ALWAYS_HIDE)
+            da_hud.Icon.Set(da_hud.Icon.DEADEYE_CORE, da_hud.Icon.ALWAYS_HIDE)
         end },
         { key = "5", event = "justPressed", active = true, fn = function()
             -- Testing in progress, this untargets entity that is being looked at
@@ -513,6 +519,12 @@ da_mode.register({
             UnregisterEagleEyeForEntity(playerId, entity)
             UnregisterEagleEyeTrailsForEntity(playerId, entity)
             EagleEyeSetFocusOnAssociatedClueTrail(playerId, 0)
+
+            da_hud.Icon.Set(da_hud.Icon.STAMINA_CORE, da_hud.Icon.ALWAYS_SHOW)
+            da_hud.Icon.Set(da_hud.Icon.HEALTH, da_hud.Icon.ALWAYS_SHOW)
+            da_hud.Icon.Set(da_hud.Icon.HEALTH_CORE, da_hud.Icon.ALWAYS_SHOW)
+            da_hud.Icon.Set(da_hud.Icon.DEADEYE, da_hud.Icon.ALWAYS_HIDE)
+            da_hud.Icon.Set(da_hud.Icon.DEADEYE_CORE, da_hud.Icon.ALWAYS_HIDE)
         end },
         { key = "Loot", event = "justPressed", active = true, fn = action(Loot) },
     },
