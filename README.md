@@ -56,3 +56,7 @@ This affects:
 ## Authors
 
 - daggre_actual
+
+## License
+
+[MIT](LICENSE) © daggre_actual
