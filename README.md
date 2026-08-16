@@ -57,6 +57,11 @@ This affects:
 
 - daggre_actual
 
+## Support
+
+Questions, bug reports, or help getting set up — the **[da.dev Discord](https://discord.com/invite/JgteBpXGaA)**
+is the fastest way to reach me. GitHub issues on this repo work too.
+
 ## License
 
 [MIT](LICENSE) © daggre_actual
